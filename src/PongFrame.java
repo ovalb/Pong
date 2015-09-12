@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class PongFrame extends JFrame {
     private GamePanel canvas;
@@ -21,11 +23,17 @@ public class PongFrame extends JFrame {
         canvas.setBackground(Color.BLACK);
         statusBar.setPreferredSize(new Dimension(0, 50));
 
+        addKeyListener(new KeyboardListener());
+
         add(canvas, BorderLayout.CENTER);
         add(statusBar, BorderLayout.SOUTH);
 
-        canvas.repaint();
-
         setVisible(true);
+    }
+    // inner listener class
+    private class KeyboardListener extends KeyAdapter {
+        @Override public void keyPressed(KeyEvent e) {
+            statusBar.score2.setText("U typed " + e.getKeyChar());
+        }
     }
 }
