@@ -2,8 +2,6 @@
  * started 11/09/2015
  */
 
-//package Pong.src;
-
 import javax.swing.*;
 
 public class Main {
