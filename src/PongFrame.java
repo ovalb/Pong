@@ -33,7 +33,18 @@ public class PongFrame extends JFrame {
     // inner listener class
     private class KeyboardListener extends KeyAdapter {
         @Override public void keyPressed(KeyEvent e) {
+            if (e.getKeyChar() == 'w')
+                canvas.setRPaneShifter(canvas.getRPaneShifter()-canvas.SHIFT_SPEED);
+            else if (e.getKeyChar() == 's')
+                canvas.setRPaneShifter(canvas.getRPaneShifter()+canvas.SHIFT_SPEED);
+
+            if (e.getKeyCode() == KeyEvent.VK_UP)
+                canvas.setLPaneShifter(canvas.getLPaneShifter()-canvas.SHIFT_SPEED);
+            else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+                canvas.setLPaneShifter(canvas.getLPaneShifter()+canvas.SHIFT_SPEED);
+
             statusBar.score2.setText("U typed " + e.getKeyChar());
+            canvas.repaint();
         }
     }
 }
