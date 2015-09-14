@@ -2,7 +2,6 @@
  * Created by gval on 12/09/15.
  */
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 public class GamePanel extends JPanel {
@@ -31,6 +30,17 @@ public class GamePanel extends JPanel {
         //paint ball in the center
         g.fillOval(getWidth() / 2 - (BALL_SIZE / 2), getHeight() / 2 - (BALL_SIZE / 2),
                 BALL_SIZE, BALL_SIZE);
+    }
+
+    //something is wrong here...
+    public boolean canMove(int paneShifter, boolean upwardsDirection) {
+        if (paneShifter <= -(getHeight()/2) + RECT_H/2 + SHIFT_SPEED && upwardsDirection)
+            return false;
+        //can't move down
+        if (paneShifter >= getHeight()/2 - RECT_H/2 - SHIFT_SPEED && !upwardsDirection)
+            return false;
+
+        return true;
     }
 
     public void setLPaneShifter(int LPaneShifter) {
