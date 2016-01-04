@@ -33,9 +33,9 @@ public class PongFrame extends JFrame {
     // inner listener class
     private class KeyboardListener extends KeyAdapter {
         @Override public void keyPressed(KeyEvent e) {
-                if (e.getKeyChar() == 'w' && canvas.canMove(canvas.getRPaneShifter(), true))
+                if (e.getKeyCode() == KeyEvent.VK_COMMA && canvas.canMove(canvas.getRPaneShifter(), true))
                     canvas.setRPaneShifter(canvas.getRPaneShifter() - canvas.SHIFT_SPEED);
-                else if (e.getKeyChar() == 's' && canvas.canMove(canvas.getRPaneShifter(), false))
+                else if (e.getKeyCode() == KeyEvent.VK_PERIOD && canvas.canMove(canvas.getRPaneShifter(), false))
                     canvas.setRPaneShifter(canvas.getRPaneShifter() + canvas.SHIFT_SPEED);
 
             if (e.getKeyCode() == KeyEvent.VK_UP &&

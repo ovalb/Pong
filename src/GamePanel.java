@@ -9,7 +9,7 @@ public class GamePanel extends JPanel {
     final private int RECT_W = 25;
     final private int RECT_H = 100;
     final private int BALL_SIZE = 30;
-    final static int SHIFT_SPEED = 10;
+    final static int SHIFT_SPEED = 15;
 
     private int RPaneShifter = 0;
     private int LPaneShifter = 0;
