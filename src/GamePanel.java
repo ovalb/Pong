@@ -5,7 +5,6 @@ import java.awt.*;
 import javax.swing.*;
 
 public class GamePanel extends JPanel {
-    Graphics g;
     final private int RECT_W = 25;
     final private int RECT_H = 100;
     final private int BALL_SIZE = 30;
@@ -15,8 +14,7 @@ public class GamePanel extends JPanel {
     private int LPaneShifter = 0;
 
     public void paintComponent(Graphics g) {
-        this.g = g;
-        super.paintComponent(g);
+        super.paintComponent(g); //This fixes a problem with the first paint() call
 
         //height and width positions for rectangles
         final int HEIGHT_POS= (getHeight() / 2) - (RECT_H/2);
@@ -32,11 +30,9 @@ public class GamePanel extends JPanel {
                 BALL_SIZE, BALL_SIZE);
     }
 
-    //something is wrong here...
     public boolean canMove(int paneShifter, boolean upwardsDirection) {
         if (paneShifter <= -(getHeight()/2) + RECT_H/2 + SHIFT_SPEED && upwardsDirection)
             return false;
-        //can't move down
         if (paneShifter >= getHeight()/2 - RECT_H/2 - SHIFT_SPEED && !upwardsDirection)
             return false;
 
