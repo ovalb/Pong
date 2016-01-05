@@ -5,10 +5,18 @@ import java.awt.*;
 import javax.swing.*;
 
 public class GamePanel extends JPanel {
+
+    private enum Direction {UP, DOWN};
+
     final private int RECT_W = 25;
     final private int RECT_H = 100;
     final private int BALL_SIZE = 30;
     final static int SHIFT_SPEED = 15;
+
+    private Ball ball = new Ball(BALL_SIZE, Color.WHITE);
+
+    private Paddle leftPaddle = new Paddle(RECT_W, RECT_H, Color.WHITE);
+    private Paddle rightPaddle = new Paddle(RECT_W, RECT_H, Color.WHITE);
 
     private int RPaneShifter = 0;
     private int LPaneShifter = 0;
@@ -21,13 +29,12 @@ public class GamePanel extends JPanel {
         final int WIDTH_POS = getWidth() - RECT_W;
 
         //paint first and second rectangles
-        g.setColor(Color.WHITE);
-        g.fillRect(0, HEIGHT_POS+RPaneShifter, RECT_W, RECT_H);
-        g.fillRect(WIDTH_POS, HEIGHT_POS+LPaneShifter, RECT_W, RECT_H);
+//        draw(leftPaddle);
+        leftPaddle.draw(0, HEIGHT_POS+RPaneShifter, g);
+        rightPaddle.draw(WIDTH_POS, HEIGHT_POS+LPaneShifter, g);
 
         //paint ball in the center
-        g.fillOval(getWidth() / 2 - (BALL_SIZE / 2), getHeight() / 2 - (BALL_SIZE / 2),
-                BALL_SIZE, BALL_SIZE);
+        ball.draw(getWidth() / 2 - (BALL_SIZE / 2), getHeight() / 2 - (BALL_SIZE / 2), g);
     }
 
     public boolean canMove(int paneShifter, boolean upwardsDirection) {
@@ -54,4 +61,11 @@ public class GamePanel extends JPanel {
     public int getLPaneShifter() {
         return LPaneShifter;
     }
+
+    public void movePaddle(Paddle p, Direction dir) {
+
+    }
+
 }
+
+
