@@ -4,68 +4,100 @@
 import java.awt.*;
 import javax.swing.*;
 
+enum Direction {UP, DOWN};
+
 public class GamePanel extends JPanel {
+    private enum Pos {LEFT, RIGHT, CENTER}; //position on canvas
 
-    private enum Direction {UP, DOWN};
+    private int w_pos, h_pos;
 
-    final private int RECT_W = 25;
-    final private int RECT_H = 100;
-    final private int BALL_SIZE = 30;
-    final static int SHIFT_SPEED = 15;
+    private Ball ball = new Ball();
 
-    private Ball ball = new Ball(BALL_SIZE, Color.WHITE);
+    private Paddle leftPaddle;
+    private Paddle rightPaddle;
 
-    private Paddle leftPaddle = new Paddle(RECT_W, RECT_H, Color.WHITE);
-    private Paddle rightPaddle = new Paddle(RECT_W, RECT_H, Color.WHITE);
-
-    private int RPaneShifter = 0;
-    private int LPaneShifter = 0;
-
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g); //This fixes a problem with the first paint() call
-
-        //height and width positions for rectangles
-        final int HEIGHT_POS= (getHeight() / 2) - (RECT_H/2);
-        final int WIDTH_POS = getWidth() - RECT_W;
-
-        //paint first and second rectangles
-//        draw(leftPaddle);
-        leftPaddle.draw(0, HEIGHT_POS+RPaneShifter, g);
-        rightPaddle.draw(WIDTH_POS, HEIGHT_POS+LPaneShifter, g);
-
-        //paint ball in the center
-        ball.draw(getWidth() / 2 - (BALL_SIZE / 2), getHeight() / 2 - (BALL_SIZE / 2), g);
+    GamePanel() {
+        leftPaddle = new Paddle();
+        rightPaddle = new Paddle();
     }
 
-    public boolean canMove(int paneShifter, boolean upwardsDirection) {
-        if (paneShifter <= -(getHeight()/2) + RECT_H/2 + SHIFT_SPEED && upwardsDirection)
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        //paint a line and a circle in the middle
+        g.setColor(Color.GRAY);
+        g.drawLine(getWidth()/2, 0, getWidth()/2, getHeight());
+        g.drawOval(getWidth()/2-40, getHeight()/2-40, 80, 80);
+
+        //paint first and second rectangles
+        setCoordinatesToDraw(leftPaddle, Pos.LEFT);
+        drawPaddle(leftPaddle, g);
+        setCoordinatesToDraw(rightPaddle, Pos.RIGHT);
+        drawPaddle(rightPaddle, g);
+
+        //paint ball in the center
+        setCoordinatesToDraw(ball, Pos.CENTER);
+        drawBall(ball, g);
+    }
+
+    private void setCoordinatesToDraw(GameComponent gc, Pos p) {
+        switch (p) {
+            case LEFT:
+                w_pos = 0;
+                h_pos = (getHeight() / 2) - (gc.getHeight() / 2);
+                break;
+            case RIGHT:
+                w_pos = (getWidth() - gc.getWidth());
+                h_pos = (getHeight() / 2) - (gc.getHeight() / 2);
+                break;
+            case CENTER:
+                w_pos = (getWidth() / 2) - (gc.getWidth() / 2);
+                h_pos = (getHeight() / 2) - (gc.getHeight() / 2);
+                break;
+            default: //should never happen
+                w_pos = 0;
+                h_pos = 0;
+                break;
+        }
+    }
+
+    private void drawPaddle(Paddle p, Graphics g) {
+        g.setColor(p.getColor());
+        g.fillRect(w_pos, h_pos+p.getPositionShifter(),
+                    p.getWidth(), p.getHeight());
+    }
+
+    private void drawBall(Ball b, Graphics g) {
+        g.setColor(b.getColor());
+        g.fillOval(w_pos, h_pos, b.getWidth(), b.getHeight());
+    }
+
+    //returns false if it can't move
+    public boolean movePaddle(Paddle p, Direction dir) {
+        boolean upwardsDirection = (dir == Direction.UP);
+
+        if (p.getPositionShifter() <= -(getHeight()/2) + p.getHeight()/2 + p.getSpeed()
+                && upwardsDirection)
             return false;
-        if (paneShifter >= getHeight()/2 - RECT_H/2 - SHIFT_SPEED && !upwardsDirection)
+        if (p.getPositionShifter() >= getHeight()/2 - p.getHeight()/2 - p.getSpeed()
+                && !upwardsDirection)
             return false;
+
+        if (upwardsDirection)
+            p.setPositionShifter(p.getPositionShifter() - p.getSpeed());
+        else
+            p.setPositionShifter(p.getPositionShifter() + p.getSpeed());
 
         return true;
     }
 
-    public void setLPaneShifter(int LPaneShifter) {
-        this.LPaneShifter = LPaneShifter;
+    public Paddle getLeftPaddle() {
+        return leftPaddle;
     }
 
-    public void setRPaneShifter(int RPaneShifter) {
-        this.RPaneShifter = RPaneShifter;
+    public Paddle getRightPaddle() {
+        return rightPaddle;
     }
-
-    public int getRPaneShifter() {
-        return RPaneShifter;
-    }
-
-    public int getLPaneShifter() {
-        return LPaneShifter;
-    }
-
-    public void movePaddle(Paddle p, Direction dir) {
-
-    }
-
 }
 
 

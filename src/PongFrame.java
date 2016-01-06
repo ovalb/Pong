@@ -33,19 +33,15 @@ public class PongFrame extends JFrame {
     // inner listener class
     private class KeyboardListener extends KeyAdapter {
         @Override public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_COMMA &&
-                    canvas.canMove(canvas.getRPaneShifter(), true))
-                canvas.setRPaneShifter(canvas.getRPaneShifter() - canvas.SHIFT_SPEED);
-            else if (e.getKeyCode() == KeyEvent.VK_PERIOD &&
-                    canvas.canMove(canvas.getRPaneShifter(), false))
-                canvas.setRPaneShifter(canvas.getRPaneShifter() + canvas.SHIFT_SPEED);
+            if (e.getKeyCode() == KeyEvent.VK_COMMA)
+                canvas.movePaddle(canvas.getLeftPaddle(), Direction.UP);
+            else if (e.getKeyCode() == KeyEvent.VK_PERIOD)
+                canvas.movePaddle(canvas.getLeftPaddle(), Direction.DOWN);
 
-            if (e.getKeyCode() == KeyEvent.VK_UP &&
-                    canvas.canMove(canvas.getLPaneShifter(), true))
-                canvas.setLPaneShifter(canvas.getLPaneShifter()-canvas.SHIFT_SPEED);
-            else if (e.getKeyCode() == KeyEvent.VK_DOWN &&
-                    canvas.canMove(canvas.getLPaneShifter(), false))
-                canvas.setLPaneShifter(canvas.getLPaneShifter()+canvas.SHIFT_SPEED);
+            if (e.getKeyCode() == KeyEvent.VK_UP)
+                canvas.movePaddle(canvas.getRightPaddle(), Direction.UP);
+            else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+                canvas.movePaddle(canvas.getRightPaddle(), Direction.DOWN);
 
 //            statusBar.score2.setText("U typed " + e.getKeyChar());
             canvas.repaint();
