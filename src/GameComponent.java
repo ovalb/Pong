@@ -3,87 +3,82 @@ import java.awt.*;
 /**
  * Created by gval on 06/01/16.
  */
-public interface GameComponent {
-    public int getWidth();
-    public int getHeight();
-}
-
-class Ball implements GameComponent {
-    private int bWidth, bHeight;
-    private Color color;
-
-    Ball() {
-        bWidth = 20;
-        bHeight = 20;
-        color = Color.WHITE;
-    }
-
-    Ball(int size, Color c) {
-        bWidth = size;
-        bHeight = size;
-        color = c;
-    }
-
-    Ball(int width, int height, Color c) {
-        bWidth = width;
-        bHeight = height;
-        color = c;
-    }
-
-    public void draw(int x, int y, Graphics g) {
-        g.setColor(color);
-        g.fillOval(x, y, bWidth, bHeight);
-    }
-
-    public int getWidth() {
-        return bWidth;
-    }
-
-    public int getHeight() {
-        return bHeight;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-}
-
-class Paddle implements GameComponent {
-    private int pWidth, pHeight;
-    private int positionShifter;
+public abstract class GameComponent {
+    private int width, height;
     private int speed;
     private Color color;
 
-    Paddle() {
-        pWidth = 25;
-        pHeight = 100;
-        positionShifter = 0;
-        speed = 15;
-        color = Color.WHITE;
+    GameComponent() {
+        width = 0;
+        height = 0;
+        speed = 1;
+        color = null;
     }
 
-    Paddle(int width, int height, Color c) {
-        this();
-        pWidth = width;
-        pHeight = height;
-        color = c;
+    GameComponent(int width, int height, Color color) {
+        this.width = width;
+        this.height = height;
+        this.color = color;
     }
 
-    public void draw(int x, int y, Graphics g) {
-        g.setColor(color);
-        g.fillRect(x, y, pWidth, pHeight);
+    public int getHeight() {
+        return height;
     }
-
+    public int getWidth() {
+        return width;
+    }
+    public int getSpeed() {
+        return speed;
+    }
     public Color getColor() {
         return color;
     }
 
-    public int getWidth() {
-        return pWidth;
+    public void setSpeed(int speed) {
+        this.speed = Math.abs(speed);
+    }
+}
+
+class Ball extends GameComponent {
+    private int xShifter = 0, yShifter = 0;
+
+    Ball() {
+        this(20, 20, Color.WHITE);
     }
 
-    public int getHeight() {
-        return pHeight;
+    Ball(int size, Color c) {
+        this(size, size, c);
+    }
+
+    Ball(int width, int height, Color c) {
+        super(width, height, c);
+        setSpeed(5);
+    }
+
+    public void setShifters(int x, int y) {
+        xShifter = x;
+        yShifter = y;
+    }
+
+    public int getXshifter() {
+        return xShifter;
+    }
+
+    public int getYshifter() {
+        return yShifter;
+    }
+}
+
+class Paddle extends GameComponent {
+    private int positionShifter = 0;
+
+    Paddle() {
+        this(25, 100, Color.WHITE);
+    }
+
+    Paddle(int width, int height, Color c) {
+        super(width, height, c);
+        setSpeed(15);
     }
 
     public int getPositionShifter() {
@@ -92,18 +87,5 @@ class Paddle implements GameComponent {
 
     public void setPositionShifter(int value) {
         positionShifter = value;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        if (speed <= 0) {
-            this.speed = 15;
-            return;
-        }
-
-        this.speed = speed;
     }
 }

@@ -3,6 +3,7 @@
  */
 import java.awt.*;
 import javax.swing.*;
+import static java.lang.Math.*;
 
 enum Direction {UP, DOWN};
 
@@ -38,6 +39,8 @@ public class GamePanel extends JPanel {
         //paint ball in the center
         setCoordinatesToDraw(ball, Pos.CENTER);
         drawBall(ball, g);
+
+        changeBallDirection(ball, 0);
     }
 
     private void setCoordinatesToDraw(GameComponent gc, Pos p) {
@@ -69,7 +72,7 @@ public class GamePanel extends JPanel {
 
     private void drawBall(Ball b, Graphics g) {
         g.setColor(b.getColor());
-        g.fillOval(w_pos, h_pos, b.getWidth(), b.getHeight());
+        g.fillOval(w_pos+1, h_pos, b.getWidth(), b.getHeight());
     }
 
     //returns false if it can't move
@@ -89,6 +92,13 @@ public class GamePanel extends JPanel {
             p.setPositionShifter(p.getPositionShifter() + p.getSpeed());
 
         return true;
+    }
+
+    public void changeBallDirection(Ball b, double dir) {
+        //this method should modify the x / y position shifter coordinates!
+        //using angles -> convert them into x and y shifts
+//        System.out.println("Sin of " + dir + " is: " + sin(dir));
+//        System.out.println("Cos of " + dir + " is: " + cos(dir));
     }
 
     public Paddle getLeftPaddle() {
