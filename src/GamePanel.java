@@ -6,21 +6,28 @@ import javax.swing.*;
 
 enum Direction {UP, DOWN};
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements Runnable {
     private enum Pos {LEFT, RIGHT, CENTER}; //position on canvas
 
     private int w_pos, h_pos;
 
+    //Gamecomponents creation
     private Ball ball;
-
     private Paddle leftPaddle;
     private Paddle rightPaddle;
 
+    //Thread related objects
+    Thread mt;
+
+
+
     GamePanel() {
         ball = new Ball();
+//        ball.changeMovement(-2, 2);
         leftPaddle = new Paddle();
         rightPaddle = new Paddle();
-        ball.changeMovement(-2, 2);
+        mt = new Thread(this, "game_session");
+        mt.start();
     }
 
     public void paintComponent(Graphics g) {
@@ -40,7 +47,31 @@ public class GamePanel extends JPanel {
         //paint ball in the center
         setCoordinatesToDraw(ball, Pos.CENTER);
         drawBall(ball, g);
-        moveBall(ball);
+//        moveBall(ball);
+    }
+
+    @Override
+    public void run() {
+        //countdown!
+        System.out.print("Game starting in: ");
+        for (int i=5; i > 0; i--) {
+            System.out.print(i + "...");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ball.changeMovement(-2, -1);
+
+        while(true) {
+            moveBall(ball);
+            repaint();
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {e.printStackTrace();}
+        }
     }
 
     private void setCoordinatesToDraw(GameComponent gc, Pos p) {

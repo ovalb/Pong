@@ -53,7 +53,7 @@ class Ball extends GameComponent {
 
     Ball(int width, int height, Color c) {
         super(width, height, c);
-        setSpeed(3);
+        setSpeed(5);
     }
 
     public void setShifters(int x, int y) {
