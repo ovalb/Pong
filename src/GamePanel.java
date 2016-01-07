@@ -20,7 +20,7 @@ public class GamePanel extends JPanel {
         ball = new Ball();
         leftPaddle = new Paddle();
         rightPaddle = new Paddle();
-        ball.changeMovement(1, 2);
+        ball.changeMovement(-2, 2);
     }
 
     public void paintComponent(Graphics g) {
@@ -96,7 +96,6 @@ public class GamePanel extends JPanel {
     }
 
     public void moveBall(Ball b) {
-//        (getHeight() / 2) - (b.getHeight() / 2)
         int newX = b.getXshifter() + b.getxMov()*b.getSpeed();
         int newY = b.getYshifter() + b.getyMov()*b.getSpeed();
 
@@ -105,6 +104,28 @@ public class GamePanel extends JPanel {
                 ((getHeight() / 2) + (b.getHeight() / 2) + newY > getHeight())) {
             b.changeMovement(b.getxMov(), -b.getyMov());
             newY = b.getYshifter() + b.getyMov() * b.getSpeed();
+        }
+
+
+
+        // horizontal constrains and collision (on leftPaddle)
+        if ((getWidth() / 2) - (b.getWidth()/2) + newX < leftPaddle.getWidth()) {
+            if ((((getHeight() / 2 + newY) <= getHeight()/2 + leftPaddle.getPositionShifter() + leftPaddle.getHeight() / 2) &&
+                    ((getHeight() / 2 + newY) >= getHeight()/2 + leftPaddle.getPositionShifter() - leftPaddle.getHeight() / 2)))
+            {
+                b.changeMovement(-b.getxMov(), b.getyMov());
+                newX = b.getXshifter() + b.getxMov() * b.getSpeed();
+            }
+        }
+
+        // horinzontal constrains and collision (on rightPaddle)
+        if ((getWidth() / 2) + (b.getWidth()/2) + newX > getWidth() - rightPaddle.getWidth()) {
+            if ((((getHeight() / 2 + newY) <= getHeight()/2 + rightPaddle.getPositionShifter() + rightPaddle.getHeight() / 2) &&
+                    ((getHeight() / 2 + newY) >= getHeight()/2 + rightPaddle.getPositionShifter() - rightPaddle.getHeight() / 2)))
+            {
+                b.changeMovement(-b.getxMov(), b.getyMov());
+                newX = b.getXshifter() + b.getxMov() * b.getSpeed();
+            }
         }
 
         b.setShifters(newX, newY);
