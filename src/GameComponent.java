@@ -41,6 +41,7 @@ public abstract class GameComponent {
 
 class Ball extends GameComponent {
     private int xShifter = 0, yShifter = 0;
+    private int xMov = 0, yMov = 0;
 
     Ball() {
         this(20, 20, Color.WHITE);
@@ -52,12 +53,24 @@ class Ball extends GameComponent {
 
     Ball(int width, int height, Color c) {
         super(width, height, c);
-        setSpeed(5);
+        setSpeed(3);
     }
 
     public void setShifters(int x, int y) {
         xShifter = x;
         yShifter = y;
+    }
+
+    public void changeMovement(int xMov, int yMov) {
+        if (xMov >= -2 && xMov <= 2)
+            this.xMov = xMov;
+        else
+            this.xMov = 0;
+
+        if (yMov >= -2 && yMov <= 2)
+            this.yMov = yMov;
+        else
+            this.yMov = 0;
     }
 
     public int getXshifter() {
@@ -66,6 +79,14 @@ class Ball extends GameComponent {
 
     public int getYshifter() {
         return yShifter;
+    }
+
+    public int getxMov() {
+        return xMov;
+    }
+
+    public int getyMov() {
+        return yMov;
     }
 }
 

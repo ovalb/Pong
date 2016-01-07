@@ -3,7 +3,6 @@
  */
 import java.awt.*;
 import javax.swing.*;
-import static java.lang.Math.*;
 
 enum Direction {UP, DOWN};
 
@@ -12,14 +11,16 @@ public class GamePanel extends JPanel {
 
     private int w_pos, h_pos;
 
-    private Ball ball = new Ball();
+    private Ball ball;
 
     private Paddle leftPaddle;
     private Paddle rightPaddle;
 
     GamePanel() {
+        ball = new Ball();
         leftPaddle = new Paddle();
         rightPaddle = new Paddle();
+        ball.changeMovement(1, 2);
     }
 
     public void paintComponent(Graphics g) {
@@ -39,8 +40,7 @@ public class GamePanel extends JPanel {
         //paint ball in the center
         setCoordinatesToDraw(ball, Pos.CENTER);
         drawBall(ball, g);
-
-        changeBallDirection(ball, 0);
+        moveBall(ball);
     }
 
     private void setCoordinatesToDraw(GameComponent gc, Pos p) {
@@ -72,7 +72,8 @@ public class GamePanel extends JPanel {
 
     private void drawBall(Ball b, Graphics g) {
         g.setColor(b.getColor());
-        g.fillOval(w_pos+1, h_pos, b.getWidth(), b.getHeight());
+        g.fillOval(w_pos+b.getXshifter(), h_pos+b.getYshifter(),
+                b.getWidth(), b.getHeight());
     }
 
     //returns false if it can't move
@@ -94,11 +95,19 @@ public class GamePanel extends JPanel {
         return true;
     }
 
-    public void changeBallDirection(Ball b, double dir) {
-        //this method should modify the x / y position shifter coordinates!
-        //using angles -> convert them into x and y shifts
-//        System.out.println("Sin of " + dir + " is: " + sin(dir));
-//        System.out.println("Cos of " + dir + " is: " + cos(dir));
+    public void moveBall(Ball b) {
+//        (getHeight() / 2) - (b.getHeight() / 2)
+        int newX = b.getXshifter() + b.getxMov()*b.getSpeed();
+        int newY = b.getYshifter() + b.getyMov()*b.getSpeed();
+
+        // vertical constrains and collision -> changes ball direction
+        if (((getHeight() / 2) - (b.getHeight() / 2) + newY < 0) ||
+                ((getHeight() / 2) + (b.getHeight() / 2) + newY > getHeight())) {
+            b.changeMovement(b.getxMov(), -b.getyMov());
+            newY = b.getYshifter() + b.getyMov() * b.getSpeed();
+        }
+
+        b.setShifters(newX, newY);
     }
 
     public Paddle getLeftPaddle() {
