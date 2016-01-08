@@ -3,31 +3,30 @@
  */
 import java.awt.*;
 import javax.swing.*;
+import static java.lang.Math.random;
 
-enum Direction {UP, DOWN};
+enum Direction {UP, DOWN}
 
 public class GamePanel extends JPanel implements Runnable {
-    private enum Pos {LEFT, RIGHT, CENTER}; //position on canvas
+    private enum Pos {LEFT, RIGHT, CENTER} //position on canvas
 
     private int w_pos, h_pos;
 
     //Gamecomponents creation
     private Ball ball;
-    private Paddle leftPaddle;
-    private Paddle rightPaddle;
+    private Paddle leftPaddle, rightPaddle;
 
     //Thread related objects
-    Thread mt;
+    Thread gameThread;
 
 
 
     GamePanel() {
         ball = new Ball();
-//        ball.changeMovement(-2, 2);
         leftPaddle = new Paddle();
         rightPaddle = new Paddle();
-        mt = new Thread(this, "game_session");
-        mt.start();
+        gameThread = new Thread(this, "game_session");
+        gameThread.start();
     }
 
     public void paintComponent(Graphics g) {
@@ -52,6 +51,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        boolean gameIsOn = true;
+
         //countdown!
         System.out.print("Game starting in: ");
         for (int i=5; i > 0; i--) {
@@ -62,14 +63,15 @@ public class GamePanel extends JPanel implements Runnable {
                 e.printStackTrace();
             }
         }
+        //Start the ball at a random direction
+        ball.changeMovement((int)(random()*10)%4-2, (int)(random()*10)%4-2);
+//        ball.changeMovement(-2, -1);
 
-        ball.changeMovement(-2, -1);
-
-        while(true) {
-            moveBall(ball);
+        while(gameIsOn) {
+            gameIsOn = moveBall(ball);
             repaint();
             try {
-                Thread.sleep(30);
+                Thread.sleep(20);
             } catch (InterruptedException e) {e.printStackTrace();}
         }
     }
@@ -126,7 +128,7 @@ public class GamePanel extends JPanel implements Runnable {
         return true;
     }
 
-    public void moveBall(Ball b) {
+    public boolean moveBall(Ball b) {
         int newX = b.getXshifter() + b.getxMov()*b.getSpeed();
         int newY = b.getYshifter() + b.getyMov()*b.getSpeed();
 
@@ -136,8 +138,6 @@ public class GamePanel extends JPanel implements Runnable {
             b.changeMovement(b.getxMov(), -b.getyMov());
             newY = b.getYshifter() + b.getyMov() * b.getSpeed();
         }
-
-
 
         // horizontal constrains and collision (on leftPaddle)
         if ((getWidth() / 2) - (b.getWidth()/2) + newX < leftPaddle.getWidth()) {
@@ -160,6 +160,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         b.setShifters(newX, newY);
+        return true;
     }
 
     public Paddle getLeftPaddle() {
