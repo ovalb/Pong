@@ -9,12 +9,29 @@ enum Direction {UP, DOWN}
 
 public class GamePanel extends JPanel implements Runnable {
     private enum Pos {LEFT, RIGHT, CENTER} //position on canvas
+    private enum PaddleCollision {
+        TOP(0), CENTRAL(1), BOTTOM(2);
+        private int index;
+        PaddleCollision(int i) {
+            index = i;
+        }
+        public int getIndex() {
+            return index;
+        }
+    }
 
     private int w_pos, h_pos;
 
     //Gamecomponents creation
     private Ball ball;
     private Paddle leftPaddle, rightPaddle;
+
+    //Collision related components
+    private int[][] newDirections = new int[][] {
+            { 0, 1, 2 },
+            { -1, 0, 1},
+            {-2, -1, 0}
+    };
 
     //Thread related objects
     Thread gameThread;
@@ -144,7 +161,7 @@ public class GamePanel extends JPanel implements Runnable {
             if ((((getHeight() / 2 + newY) <= getHeight()/2 + leftPaddle.getPositionShifter() + leftPaddle.getHeight() / 2) &&
                     ((getHeight() / 2 + newY) >= getHeight()/2 + leftPaddle.getPositionShifter() - leftPaddle.getHeight() / 2)))
             {
-                b.changeMovement(-b.getxMov(), b.getyMov());
+                b.changeMovement(-b.getxMov(), vDirectionOnCollision(leftPaddle, b));
                 newX = b.getXshifter() + b.getxMov() * b.getSpeed();
             }
         }
@@ -154,13 +171,46 @@ public class GamePanel extends JPanel implements Runnable {
             if ((((getHeight() / 2 + newY) <= getHeight()/2 + rightPaddle.getPositionShifter() + rightPaddle.getHeight() / 2) &&
                     ((getHeight() / 2 + newY) >= getHeight()/2 + rightPaddle.getPositionShifter() - rightPaddle.getHeight() / 2)))
             {
-                b.changeMovement(-b.getxMov(), b.getyMov());
+                b.changeMovement(-b.getxMov(), vDirectionOnCollision(rightPaddle, b));
                 newX = b.getXshifter() + b.getxMov() * b.getSpeed();
             }
         }
 
         b.setShifters(newX, newY);
         return true;
+    }
+
+    //returns a PaddleCollision value (0, 1, 2) according to where the ball collides
+    private PaddleCollision posOnCollision(Paddle p, Ball b) {
+        int ballVerticalPos = getHeight()/2 + b.getYshifter();
+
+        int PaddlePart = p.getHeight() / 3;
+        int Y0 = getHeight() / 2 + p.getPositionShifter() - p.getHeight()/2 + PaddlePart;
+        int Y1 = Y0 + PaddlePart;
+
+        PaddleCollision position = PaddleCollision.CENTRAL;
+
+        if (ballVerticalPos <= Y0)
+            position = PaddleCollision.TOP;
+        if (ballVerticalPos >= Y1)
+            position = PaddleCollision.BOTTOM;
+
+        return position;
+    }
+
+    private int vDirectionOnCollision(Paddle p, Ball b) {
+        PaddleCollision position = posOnCollision(p, b);
+        int oldDirection = b.getyMov();
+        int index;
+
+        if (oldDirection > 0)
+            index = 0;
+        else if (oldDirection == 0)
+            index = 1;
+        else
+            index = 2;
+
+        return newDirections[index][position.getIndex()];
     }
 
     public Paddle getLeftPaddle() {
