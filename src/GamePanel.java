@@ -33,10 +33,10 @@ public class GamePanel extends JPanel implements Runnable {
             {-2, -1, 0}
     };
 
+    private boolean collisionsDisabled = false;
+
     //Thread related objects
     Thread gameThread;
-
-
 
     GamePanel() {
         ball = new Ball();
@@ -63,7 +63,6 @@ public class GamePanel extends JPanel implements Runnable {
         //paint ball in the center
         setCoordinatesToDraw(ball, Pos.CENTER);
         drawBall(ball, g);
-//        moveBall(ball);
     }
 
     @Override
@@ -81,16 +80,42 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         //Start the ball at a random direction
-        ball.changeMovement((int)(random()*10)%4-2, (int)(random()*10)%4-2);
-//        ball.changeMovement(-2, -1);
+//        ball.changeMovement((int)(random()*10)%4-2, (int)(random()*10)%4-2);
+        ball.changeMovement(-2, -1);
 
-        while(gameIsOn) {
-            gameIsOn = moveBall(ball);
+        do {
+            //countdown
+            System.out.print("Game starting in: ");
+            for (int i=5; i > 0; i--) {
+                System.out.print(i + "...");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            while (gameIsOn) {
+                gameIsOn = moveBall(ball);
+                repaint();
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.println("YEAAAH PUNTO!!!");
+
+            //reset everything
+            gameIsOn = true;
+            collisionsDisabled = false;
+            leftPaddle.setPositionShifter(0);
+            rightPaddle.setPositionShifter(0);
+            ball.setShifters(0, 0);
             repaint();
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {e.printStackTrace();}
-        }
+
+        } while (true);
     }
 
     private void setCoordinatesToDraw(GameComponent gc, Pos p) {
@@ -149,31 +174,46 @@ public class GamePanel extends JPanel implements Runnable {
         int newX = b.getXshifter() + b.getxMov()*b.getSpeed();
         int newY = b.getYshifter() + b.getyMov()*b.getSpeed();
 
+        //helper variables (to make if statements more understandable)
+        int centralHeight = this.getHeight() / 2;
+        int centralWidth = this.getWidth() / 2;
+
+        int ballPositionY = centralHeight + newY;
+        int ballPositionX = centralWidth + newX;
+
         // vertical constrains and collision -> changes ball direction
-        if (((getHeight() / 2) - (b.getHeight() / 2) + newY < 0) ||
-                ((getHeight() / 2) + (b.getHeight() / 2) + newY > getHeight())) {
+        if ((ballPositionY - (b.getHeight()/2) < 0) || (ballPositionY + (b.getHeight()/2) > getHeight())) {
             b.changeMovement(b.getxMov(), -b.getyMov());
             newY = b.getYshifter() + b.getyMov() * b.getSpeed();
         }
 
-        // horizontal constrains and collision (on leftPaddle)
-        if ((getWidth() / 2) - (b.getWidth()/2) + newX < leftPaddle.getWidth()) {
-            if ((((getHeight() / 2 + newY) <= getHeight()/2 + leftPaddle.getPositionShifter() + leftPaddle.getHeight() / 2) &&
-                    ((getHeight() / 2 + newY) >= getHeight()/2 + leftPaddle.getPositionShifter() - leftPaddle.getHeight() / 2)))
-            {
-                b.changeMovement(-b.getxMov(), vDirectionOnCollision(leftPaddle, b));
-                newX = b.getXshifter() + b.getxMov() * b.getSpeed();
+        if (!collisionsDisabled) {
+
+            // horizontal constrains and collision (on leftPaddle)
+            if (ballPositionX - (b.getWidth() / 2) < leftPaddle.getWidth()) {
+                if (((ballPositionY <= centralHeight + leftPaddle.getPositionShifter() + leftPaddle.getHeight() / 2) &&
+                        (ballPositionY >= centralHeight + leftPaddle.getPositionShifter() - leftPaddle.getHeight() / 2))) {
+                    b.changeMovement(-b.getxMov(), vDirectionOnCollision(leftPaddle, b));
+                    newX = b.getXshifter() + b.getxMov() * b.getSpeed();
+                } else {
+                    collisionsDisabled = true;
+                }
+            }
+
+            // horinzontal constrains and collision (on rightPaddle)
+            if (ballPositionX + (b.getWidth() / 2) > getWidth() - rightPaddle.getWidth()) {
+                if (((ballPositionY <= centralHeight + rightPaddle.getPositionShifter() + rightPaddle.getHeight() / 2) &&
+                        (ballPositionY >= centralHeight + rightPaddle.getPositionShifter() - rightPaddle.getHeight() / 2))) {
+                    b.changeMovement(-b.getxMov(), vDirectionOnCollision(rightPaddle, b));
+                    newX = b.getXshifter() + b.getxMov() * b.getSpeed();
+                } else {
+                    collisionsDisabled = true;
+                }
             }
         }
-
-        // horinzontal constrains and collision (on rightPaddle)
-        if ((getWidth() / 2) + (b.getWidth()/2) + newX > getWidth() - rightPaddle.getWidth()) {
-            if ((((getHeight() / 2 + newY) <= getHeight()/2 + rightPaddle.getPositionShifter() + rightPaddle.getHeight() / 2) &&
-                    ((getHeight() / 2 + newY) >= getHeight()/2 + rightPaddle.getPositionShifter() - rightPaddle.getHeight() / 2)))
-            {
-                b.changeMovement(-b.getxMov(), vDirectionOnCollision(rightPaddle, b));
-                newX = b.getXshifter() + b.getxMov() * b.getSpeed();
-            }
+        else { //if collisions have been disabled, check for the end of the game
+            if (b.getXshifter() + centralWidth <= 0 || b.getXshifter() + centralWidth >= getWidth())
+                return false;
         }
 
         b.setShifters(newX, newY);
@@ -210,6 +250,7 @@ public class GamePanel extends JPanel implements Runnable {
         else
             index = 2;
 
+        System.out.println(newDirections[index][position.getIndex()]);
         return newDirections[index][position.getIndex()];
     }
 
