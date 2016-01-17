@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        this.setBackground(Color.BLACK);
 
         //paint a line and a circle in the middle
         g.setColor(Color.GRAY);
@@ -67,55 +68,34 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        do {
+            System.out.print("Game starting in: ");
+            countDown(5);
+            play();
+            System.out.println("YEAAAH PUNTO!!!");
+
+            reset();
+            repaint();
+
+        } while (true);
+    }
+
+    public void play() {
         boolean gameIsOn = true;
 
-        //countdown!
-        System.out.print("Game starting in: ");
-        for (int i=5; i > 0; i--) {
-            System.out.print(i + "...");
+        //Start the ball at a fixed direction
+        ball.changeMovement(-2, -1);
+
+        //Start the game
+        while (gameIsOn) {
+            gameIsOn = moveBall(ball);
+            repaint();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        //Start the ball at a random direction
-//        ball.changeMovement((int)(random()*10)%4-2, (int)(random()*10)%4-2);
-        ball.changeMovement(-2, -1);
-
-        do {
-            //countdown
-            System.out.print("Game starting in: ");
-            for (int i=5; i > 0; i--) {
-                System.out.print(i + "...");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            while (gameIsOn) {
-                gameIsOn = moveBall(ball);
-                repaint();
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            System.out.println("YEAAAH PUNTO!!!");
-
-            //reset everything
-            gameIsOn = true;
-            collisionsDisabled = false;
-            leftPaddle.setPositionShifter(0);
-            rightPaddle.setPositionShifter(0);
-            ball.setShifters(0, 0);
-            repaint();
-
-        } while (true);
     }
 
     private void setCoordinatesToDraw(GameComponent gc, Pos p) {
@@ -170,6 +150,7 @@ public class GamePanel extends JPanel implements Runnable {
         return true;
     }
 
+    //returns false when game ends
     public boolean moveBall(Ball b) {
         int newX = b.getXshifter() + b.getxMov()*b.getSpeed();
         int newY = b.getYshifter() + b.getyMov()*b.getSpeed();
@@ -250,8 +231,25 @@ public class GamePanel extends JPanel implements Runnable {
         else
             index = 2;
 
-        System.out.println(newDirections[index][position.getIndex()]);
         return newDirections[index][position.getIndex()];
+    }
+
+    private void countDown(int seconds) {
+        for (int i=seconds; i > 0; i--) {
+            System.out.print(i + "...");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void reset() {
+        collisionsDisabled = false;
+        leftPaddle.setPositionShifter(0);
+        rightPaddle.setPositionShifter(0);
+        ball.setShifters(0, 0);
     }
 
     public Paddle getLeftPaddle() {
@@ -262,5 +260,3 @@ public class GamePanel extends JPanel implements Runnable {
         return rightPaddle;
     }
 }
-
-

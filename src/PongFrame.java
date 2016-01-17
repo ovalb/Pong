@@ -20,7 +20,6 @@ public class PongFrame extends JFrame {
         canvas = new GamePanel();
         statusBar = new StatusPanel();
 
-        canvas.setBackground(Color.BLACK);
         statusBar.setPreferredSize(new Dimension(0, 50));
 
         addKeyListener(new KeyboardListener());
