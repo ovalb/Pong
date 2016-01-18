@@ -54,8 +54,10 @@ public class GamePanel extends JPanel {
 
         //paint a line and a circle in the middle
         g.setColor(Color.GRAY);
-        g.drawLine(getWidth()/2, 0, getWidth()/2, getHeight());
+        g.drawLine(getWidth()/2, 5, getWidth()/2, getHeight()-5);
         g.drawOval(getWidth()/2-40, getHeight()/2-40, 80, 80);
+
+        g.drawRoundRect(5, 5, getWidth()-10, getHeight()-10, 30, 30);
 
         //paint first and second rectangles
         setCoordinatesToDraw(leftPaddle, Pos.LEFT);

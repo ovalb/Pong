@@ -3,15 +3,14 @@
  */
 
 import java.awt.*;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import javax.swing.*;
+
 
 public class StatusPanel extends JPanel {
     JLabel scoreLeft = new JLabel("0");
     JLabel scoreRight = new JLabel("0");
 
     StatusPanel() {
-        setLayout(new BorderLayout());
         setBackground(Color.BLACK);
 
         scoreLeft.setFont(new Font("Helvetica", Font.BOLD, 24));
@@ -20,7 +19,13 @@ public class StatusPanel extends JPanel {
         scoreLeft.setForeground(Color.WHITE);
         scoreRight.setForeground(Color.WHITE);
 
-        add(scoreLeft, BorderLayout.WEST);
-        add(scoreRight, BorderLayout.EAST);
+        JSplitPane splitPane = new JSplitPane();
+        splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setBackground(Color.BLACK);
+        splitPane.setDividerSize(70);
+        splitPane.setLeftComponent(scoreLeft);
+        splitPane.setRightComponent(scoreRight);
+
+        this.add(splitPane);
     }
 }
