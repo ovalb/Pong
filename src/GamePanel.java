@@ -6,6 +6,7 @@ import javax.swing.*;
 import static java.lang.Math.random;
 
 enum Direction {UP, DOWN}
+enum Player {RIGHT, LEFT}
 
 public class GamePanel extends JPanel implements Runnable {
     private enum Pos {LEFT, RIGHT, CENTER} //position on canvas
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     //Gamecomponents creation
     private Ball ball;
     private Paddle leftPaddle, rightPaddle;
+    private Player whoScored;
 
     //Collision related components
     private int[][] newDirections = new int[][] {
@@ -73,7 +75,10 @@ public class GamePanel extends JPanel implements Runnable {
             System.out.print("Game starting in: ");
             countDown(5);
             play();
-            System.out.println("YEAAAH PUNTO!!!");
+            if (whoScored == Player.LEFT)
+                System.out.println("Punto per player left!");
+            else
+                System.out.println("Punto per player right!");
 
             reset();
             repaint();
@@ -180,6 +185,7 @@ public class GamePanel extends JPanel implements Runnable {
                     newX = b.getXshifter() + b.getxMov() * b.getSpeed();
                 } else {
                     collisionsDisabled = true;
+                    whoScored = Player.RIGHT;
                 }
             }
 
@@ -192,6 +198,7 @@ public class GamePanel extends JPanel implements Runnable {
                     newX = b.getXshifter() + b.getxMov() * b.getSpeed();
                 } else {
                     collisionsDisabled = true;
+                    whoScored = Player.LEFT;
                 }
             }
         }
