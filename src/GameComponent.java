@@ -35,7 +35,7 @@ public abstract class GameComponent {
     }
 
     public void setSpeed(int speed) {
-        this.speed = Math.abs(speed);
+        this.speed = speed;
     }
 }
 

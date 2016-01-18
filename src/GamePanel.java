@@ -27,7 +27,10 @@ public class GamePanel extends JPanel {
     //Gamecomponents creation
     private Ball ball;
     private Paddle leftPaddle, rightPaddle;
+
+    //Game related elements
     private Player whoScored;
+    private int tickCount = 0;
 
     //Collision related components
     private int[][] newDirections = new int[][] {
@@ -73,6 +76,8 @@ public class GamePanel extends JPanel {
         //Start the game
         while (gameIsOn) {
             gameIsOn = moveBall(ball);
+            automaticMove(leftPaddle, true);
+
             repaint();
             try {
                 Thread.sleep(20);
@@ -134,6 +139,15 @@ public class GamePanel extends JPanel {
         return true;
     }
 
+    public void automaticMove(Paddle p, boolean b) {
+        if (!b) return;
+
+        if (p.getPositionShifter() > ball.getYshifter())
+            movePaddle(p, Direction.UP);
+        if (p.getPositionShifter() < ball.getYshifter())
+            movePaddle(p, Direction.DOWN);
+    }
+
     //returns false when game ends
     public boolean moveBall(Ball b) {
         int newX = b.getXshifter() + b.getxMov()*b.getSpeed();
@@ -161,12 +175,13 @@ public class GamePanel extends JPanel {
                         (ballPositionY >= centralHeight + leftPaddle.getPositionShifter() - leftPaddle.getHeight() / 2))) {
                     b.changeMovement(-b.getxMov(), vDirectionOnCollision(leftPaddle, b));
                     newX = b.getXshifter() + b.getxMov() * b.getSpeed();
+                    tickCount++;
+                    System.out.println("tick: " + tickCount + " speed: " + ball.getSpeed());
                 } else {
                     collisionsDisabled = true;
                     whoScored = Player.RIGHT;
                 }
             }
-
 
             // horinzontal constrains and collision (on rightPaddle)
             if (ballPositionX + (b.getWidth() / 2) > getWidth() - rightPaddle.getWidth()) {
@@ -174,6 +189,8 @@ public class GamePanel extends JPanel {
                         (ballPositionY >= centralHeight + rightPaddle.getPositionShifter() - rightPaddle.getHeight() / 2))) {
                     b.changeMovement(-b.getxMov(), vDirectionOnCollision(rightPaddle, b));
                     newX = b.getXshifter() + b.getxMov() * b.getSpeed();
+                    tickCount++;
+                    System.out.println("tick: " + tickCount + " speed: " + ball.getSpeed());
                 } else {
                     collisionsDisabled = true;
                     whoScored = Player.LEFT;
@@ -183,6 +200,13 @@ public class GamePanel extends JPanel {
         else { //if collisions have been disabled, check for the end of the game
             if (b.getXshifter() + centralWidth <= 0 || b.getXshifter() + centralWidth >= getWidth())
                 return false;
+        }
+
+        //increases speed every 5 ticks by 1
+        //something really weird happens if I put (tickCount % 5 == 0) in the condition
+        if (tickCount == 5) {
+            ball.setSpeed(ball.getSpeed() + 1);
+            tickCount = 0;
         }
 
         b.setShifters(newX, newY);
@@ -236,9 +260,11 @@ public class GamePanel extends JPanel {
 
     public void reset() {
         collisionsDisabled = false;
+        tickCount = 0;
         leftPaddle.setPositionShifter(0);
         rightPaddle.setPositionShifter(0);
         ball.setShifters(0, 0);
+        ball.setSpeed(2);
     }
 
     public Player getWhoScored() {

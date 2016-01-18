@@ -70,10 +70,10 @@ public class PongFrame extends JFrame implements Runnable {
     // inner listener class
     private class KeyboardListener extends KeyAdapter {
         @Override public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_COMMA)
-                canvas.movePaddle(canvas.getLeftPaddle(), Direction.UP);
-            else if (e.getKeyCode() == KeyEvent.VK_PERIOD)
-                canvas.movePaddle(canvas.getLeftPaddle(), Direction.DOWN);
+//            if (e.getKeyCode() == KeyEvent.VK_COMMA)
+//                canvas.movePaddle(canvas.getLeftPaddle(), Direction.UP);
+//            else if (e.getKeyCode() == KeyEvent.VK_PERIOD)
+//                canvas.movePaddle(canvas.getLeftPaddle(), Direction.DOWN);
 
             if (e.getKeyCode() == KeyEvent.VK_UP)
                 canvas.movePaddle(canvas.getRightPaddle(), Direction.UP);
