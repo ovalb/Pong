@@ -31,6 +31,7 @@ public class GamePanel extends JPanel {
     //Game related elements
     private Player whoScored;
     private int tickCount = 0;
+    private boolean auto = true;
 
     //Collision related components
     private int[][] newDirections = new int[][] {
@@ -71,12 +72,13 @@ public class GamePanel extends JPanel {
         boolean gameIsOn = true;
 
         //Start the ball at a fixed direction
-        ball.changeMovement(-2, -1);
+        ball.changeMovement(-2, (int)(Math.random() * 10)%4-2);
+        System.out.println(ball.getyMov() + " " + ball.getxMov());
 
         //Start the game
         while (gameIsOn) {
             gameIsOn = moveBall(ball);
-            automaticMove(leftPaddle, true);
+            if (auto) automaticMove(leftPaddle);
 
             repaint();
             try {
@@ -139,9 +141,7 @@ public class GamePanel extends JPanel {
         return true;
     }
 
-    public void automaticMove(Paddle p, boolean b) {
-        if (!b) return;
-
+    public void automaticMove(Paddle p) {
         if (p.getPositionShifter() > ball.getYshifter())
             movePaddle(p, Direction.UP);
         if (p.getPositionShifter() < ball.getYshifter())
@@ -277,5 +277,13 @@ public class GamePanel extends JPanel {
 
     public Paddle getRightPaddle() {
         return rightPaddle;
+    }
+
+    public boolean isAuto() {
+        return auto;
+    }
+
+    public void setAuto(boolean auto) {
+        this.auto = auto;
     }
 }

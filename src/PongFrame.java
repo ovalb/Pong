@@ -1,3 +1,5 @@
+import com.sun.codemodel.internal.JOp;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -13,6 +15,8 @@ public class PongFrame extends JFrame implements Runnable {
 
     private int scoreLeft;
     private int scoreRight;
+
+    private int multiplayer;
 
     Thread t;
 
@@ -43,6 +47,13 @@ public class PongFrame extends JFrame implements Runnable {
     public void run() {
         scoreLeft = 0; scoreRight = 0;
 
+        multiplayer = JOptionPane.showConfirmDialog(this, "Want to play against a bot?",
+                                                    "Multiplayer? ", JOptionPane.YES_NO_OPTION);
+        if (multiplayer == 0) //if YES
+            canvas.setAuto(true);
+        else
+            canvas.setAuto(false);
+
         do {
             System.out.print("\nGame starting in: ");
             canvas.countDown(3);
@@ -70,10 +81,12 @@ public class PongFrame extends JFrame implements Runnable {
     // inner listener class
     private class KeyboardListener extends KeyAdapter {
         @Override public void keyPressed(KeyEvent e) {
-//            if (e.getKeyCode() == KeyEvent.VK_COMMA)
-//                canvas.movePaddle(canvas.getLeftPaddle(), Direction.UP);
-//            else if (e.getKeyCode() == KeyEvent.VK_PERIOD)
-//                canvas.movePaddle(canvas.getLeftPaddle(), Direction.DOWN);
+            if (!canvas.isAuto()) {
+                if (e.getKeyCode() == KeyEvent.VK_COMMA)
+                    canvas.movePaddle(canvas.getLeftPaddle(), Direction.UP);
+                else if (e.getKeyCode() == KeyEvent.VK_PERIOD)
+                    canvas.movePaddle(canvas.getLeftPaddle(), Direction.DOWN);
+            }
 
             if (e.getKeyCode() == KeyEvent.VK_UP)
                 canvas.movePaddle(canvas.getRightPaddle(), Direction.UP);
