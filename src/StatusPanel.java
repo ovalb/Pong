@@ -8,13 +8,13 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 
 public class StatusPanel extends JPanel {
-    JLabel score1 = new JLabel("score1");
-    JLabel score2 = new JLabel("score2");
+    JLabel scoreLeft = new JLabel("0");
+    JLabel scoreRight = new JLabel("0");
 
     StatusPanel() {
         setLayout(new BorderLayout());
 //        setBackground(Color.WHITE);
-        add(score1, BorderLayout.WEST);
-        add(score2, BorderLayout.EAST);
+        add(scoreLeft, BorderLayout.WEST);
+        add(scoreRight, BorderLayout.EAST);
     }
 }

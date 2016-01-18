@@ -8,7 +8,7 @@ import static java.lang.Math.random;
 enum Direction {UP, DOWN}
 enum Player {RIGHT, LEFT}
 
-public class GamePanel extends JPanel implements Runnable {
+public class GamePanel extends JPanel {
     private enum Pos {LEFT, RIGHT, CENTER} //position on canvas
 
     private enum PaddleCollision {
@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     //Gamecomponents creation
     private Ball ball;
     private Paddle leftPaddle, rightPaddle;
-    private Player whoScored;
+    private Player whoScored = null;
 
     //Collision related components
     private int[][] newDirections = new int[][] {
@@ -38,15 +38,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     private boolean collisionsDisabled = false;
 
-    //Thread related objects
-    Thread gameThread;
-
     GamePanel() {
         ball = new Ball();
         leftPaddle = new Paddle();
         rightPaddle = new Paddle();
-        gameThread = new Thread(this, "game_session");
-        gameThread.start();
     }
 
     public void paintComponent(Graphics g) {
@@ -67,23 +62,6 @@ public class GamePanel extends JPanel implements Runnable {
         //paint ball in the center
         setCoordinatesToDraw(ball, Pos.CENTER);
         drawBall(ball, g);
-    }
-
-    @Override
-    public void run() {
-        do {
-            System.out.print("Game starting in: ");
-            countDown(5);
-            play();
-            if (whoScored == Player.LEFT)
-                System.out.println("Punto per player left!");
-            else
-                System.out.println("Punto per player right!");
-
-            reset();
-            repaint();
-
-        } while (true);
     }
 
     public void play() {
@@ -245,7 +223,7 @@ public class GamePanel extends JPanel implements Runnable {
         return newDirections[index][position.getIndex()];
     }
 
-    private void countDown(int seconds) {
+    public void countDown(int seconds) {
         for (int i=seconds; i > 0; i--) {
             System.out.print(i + "...");
             try {
@@ -256,11 +234,15 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    private void reset() {
+    public void reset() {
         collisionsDisabled = false;
         leftPaddle.setPositionShifter(0);
         rightPaddle.setPositionShifter(0);
         ball.setShifters(0, 0);
+    }
+
+    public Player getWhoScored() {
+        return whoScored;
     }
 
     public Paddle getLeftPaddle() {

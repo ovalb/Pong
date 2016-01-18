@@ -3,12 +3,18 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class PongFrame extends JFrame {
+public class PongFrame extends JFrame implements Runnable {
     private GamePanel canvas;
     private StatusPanel statusBar;
 
     private final int HEIGHT = 600;
     private final int WIDTH = 600;
+    private final int MAX_SCORE = 3;
+
+    private int scoreLeft;
+    private int scoreRight;
+
+    Thread t;
 
     PongFrame(String title) {
         super(title);
@@ -28,7 +34,38 @@ public class PongFrame extends JFrame {
         add(statusBar, BorderLayout.SOUTH);
 
         setVisible(true);
+
+        t = new Thread(this);
+        t.start();
     }
+
+    @Override
+    public void run() {
+        scoreLeft = 0; scoreRight = 0;
+
+        do {
+            System.out.print("\nGame starting in: ");
+            canvas.countDown(3);
+            canvas.play();
+            if (canvas.getWhoScored() == Player.LEFT)
+                statusBar.scoreLeft.setText(String.valueOf(++scoreLeft));
+            else
+                statusBar.scoreRight.setText(String.valueOf(++scoreRight));
+
+            canvas.reset();
+            repaint();
+
+        } while (scoreLeft != MAX_SCORE && scoreRight != MAX_SCORE);
+
+        if (scoreLeft == MAX_SCORE)
+            System.out.println("Player LEFT won!");
+        else
+            System.out.println("Player RIGHT won!");
+
+        this.setVisible(false);
+        this.dispose();
+    }
+
     // inner listener class
     private class KeyboardListener extends KeyAdapter {
         @Override public void keyPressed(KeyEvent e) {
