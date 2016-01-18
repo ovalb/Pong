@@ -58,9 +58,10 @@ public class PongFrame extends JFrame implements Runnable {
         } while (scoreLeft != MAX_SCORE && scoreRight != MAX_SCORE);
 
         if (scoreLeft == MAX_SCORE)
-            System.out.println("Player LEFT won!");
+            JOptionPane.showMessageDialog(this, "Player LEFT won!");
+
         else
-            System.out.println("Player RIGHT won!");
+            JOptionPane.showMessageDialog(this, "Player RIGHT won!");
 
         this.setVisible(false);
         this.dispose();
@@ -79,7 +80,6 @@ public class PongFrame extends JFrame implements Runnable {
             else if (e.getKeyCode() == KeyEvent.VK_DOWN)
                 canvas.movePaddle(canvas.getRightPaddle(), Direction.DOWN);
 
-//            statusBar.score2.setText("U typed " + e.getKeyChar());
             canvas.repaint();
         }
     }

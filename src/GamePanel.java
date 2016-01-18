@@ -27,7 +27,7 @@ public class GamePanel extends JPanel {
     //Gamecomponents creation
     private Ball ball;
     private Paddle leftPaddle, rightPaddle;
-    private Player whoScored = null;
+    private Player whoScored;
 
     //Collision related components
     private int[][] newDirections = new int[][] {
