@@ -1,9 +1,12 @@
 /**
  * Created by gval on 12/09/15.
  */
+package game;
+
 import java.awt.*;
 import javax.swing.*;
 import static java.lang.Math.random;
+
 
 enum Direction {UP, DOWN}
 enum Player {RIGHT, LEFT}

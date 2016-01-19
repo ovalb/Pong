@@ -1,9 +1,11 @@
+package game;
 import com.sun.codemodel.internal.JOp;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 
 public class PongFrame extends JFrame implements Runnable {
     private GamePanel canvas;

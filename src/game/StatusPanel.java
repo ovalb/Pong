@@ -1,7 +1,7 @@
 /**
  * Created by gval on 12/09/15.
  */
-
+package game;
 import java.awt.*;
 import javax.swing.*;
 
