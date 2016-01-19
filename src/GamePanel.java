@@ -44,19 +44,18 @@ public class GamePanel extends JPanel {
 
     GamePanel() {
         ball = new Ball();
-        leftPaddle = new Paddle();
-        rightPaddle = new Paddle();
+        leftPaddle = new Paddle(15, 50, Color.BLUE);
+        rightPaddle = new Paddle(15, 150, Color.RED);
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(Color.BLACK);
 
-        //paint a line and a circle in the middle
+        //paint borders, a line and a circle in the middle
         g.setColor(Color.GRAY);
         g.drawLine(getWidth()/2, 5, getWidth()/2, getHeight()-5);
         g.drawOval(getWidth()/2-40, getHeight()/2-40, 80, 80);
-
         g.drawRoundRect(5, 5, getWidth()-10, getHeight()-10, 30, 30);
 
         //paint first and second rectangles
@@ -73,9 +72,8 @@ public class GamePanel extends JPanel {
     public void play() {
         boolean gameIsOn = true;
 
-        //Start the ball at a fixed direction
+        //Set starting ball direction (randomized vertically)
         ball.changeMovement(-2, (int)(Math.random() * 10)%4-2);
-        System.out.println(ball.getyMov() + " " + ball.getxMov());
 
         //Start the game
         while (gameIsOn) {
@@ -84,7 +82,7 @@ public class GamePanel extends JPanel {
 
             repaint();
             try {
-                Thread.sleep(20);
+                Thread.sleep(30);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -151,6 +149,7 @@ public class GamePanel extends JPanel {
     }
 
     //returns false when game ends
+    //TODO fix bug where ball passes through the paddle after vertical collision
     public boolean moveBall(Ball b) {
         int newX = b.getXshifter() + b.getxMov()*b.getSpeed();
         int newY = b.getYshifter() + b.getyMov()*b.getSpeed();
