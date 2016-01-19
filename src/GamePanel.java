@@ -7,6 +7,7 @@ import static java.lang.Math.random;
 
 enum Direction {UP, DOWN}
 enum Player {RIGHT, LEFT}
+enum Difficulty {EASY, MEDIUM, HARD}
 
 public class GamePanel extends JPanel {
     private enum Pos {LEFT, RIGHT, CENTER} //position on canvas
@@ -28,10 +29,11 @@ public class GamePanel extends JPanel {
     private Ball ball;
     private Paddle leftPaddle, rightPaddle;
 
-    //Game related elements
+    //Gameplay related elements
     private Player whoScored;
     private int tickCount = 0;
     private boolean auto = true;
+    private Difficulty level = Difficulty.MEDIUM;
 
     //Collision related components
     private int[][] newDirections = new int[][] {
@@ -44,29 +46,32 @@ public class GamePanel extends JPanel {
 
     GamePanel() {
         ball = new Ball();
-        leftPaddle = new Paddle(15, 50, Color.BLUE);
-        rightPaddle = new Paddle(15, 150, Color.RED);
+        leftPaddle = new Paddle(15, 100, Color.BLUE);
+        rightPaddle = new Paddle(15, 100, Color.RED);
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(Color.BLACK);
 
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         //paint borders, a line and a circle in the middle
-        g.setColor(Color.GRAY);
-        g.drawLine(getWidth()/2, 5, getWidth()/2, getHeight()-5);
-        g.drawOval(getWidth()/2-40, getHeight()/2-40, 80, 80);
-        g.drawRoundRect(5, 5, getWidth()-10, getHeight()-10, 30, 30);
+        g2d.setColor(Color.GRAY);
+        g2d.drawLine(getWidth()/2, 5, getWidth()/2, getHeight()-5);
+        g2d.drawOval(getWidth()/2-40, getHeight()/2-40, 80, 80);
+        g2d.drawRoundRect(5, 5, getWidth()-10, getHeight()-10, 30, 30);
 
         //paint first and second rectangles
         setCoordinatesToDraw(leftPaddle, Pos.LEFT);
-        drawPaddle(leftPaddle, g);
+        drawPaddle(leftPaddle, g2d);
         setCoordinatesToDraw(rightPaddle, Pos.RIGHT);
-        drawPaddle(rightPaddle, g);
+        drawPaddle(rightPaddle, g2d);
 
         //paint ball in the center
         setCoordinatesToDraw(ball, Pos.CENTER);
-        drawBall(ball, g);
+        drawBall(ball, g2d);
     }
 
     public void play() {
@@ -82,7 +87,7 @@ public class GamePanel extends JPanel {
 
             repaint();
             try {
-                Thread.sleep(30);
+                Thread.sleep(25);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -142,10 +147,32 @@ public class GamePanel extends JPanel {
     }
 
     public void automaticMove(Paddle p) {
-        if (p.getPositionShifter() > ball.getYshifter())
-            movePaddle(p, Direction.UP);
-        if (p.getPositionShifter() < ball.getYshifter())
-            movePaddle(p, Direction.DOWN);
+        if (level == Difficulty.EASY) {
+            // Assuming bot is always leftPaddle
+            if (getWidth()/2+ball.getXshifter() < getWidth()/2-100) {
+                if (p.getPositionShifter() > ball.getYshifter())
+                    movePaddle(p, Direction.UP);
+                if (p.getPositionShifter() < ball.getYshifter())
+                    movePaddle(p, Direction.DOWN);
+            }
+        }
+        if (level == Difficulty.MEDIUM) {
+            // Assuming bot is always leftPaddle
+            if (getWidth()/2+ball.getXshifter() < getWidth()/2-80) {
+                if (p.getPositionShifter() > ball.getYshifter())
+                    movePaddle(p, Direction.UP);
+                if (p.getPositionShifter() < ball.getYshifter())
+                    movePaddle(p, Direction.DOWN);
+            }
+        }
+
+        //paddle follows ball every step
+        if (level == Difficulty.HARD) {
+            if (p.getPositionShifter() > ball.getYshifter())
+                movePaddle(p, Direction.UP);
+            if (p.getPositionShifter() < ball.getYshifter())
+                movePaddle(p, Direction.DOWN);
+        }
     }
 
     //returns false when game ends
@@ -177,7 +204,7 @@ public class GamePanel extends JPanel {
                     b.changeMovement(-b.getxMov(), vDirectionOnCollision(leftPaddle, b));
                     newX = b.getXshifter() + b.getxMov() * b.getSpeed();
                     tickCount++;
-                    System.out.println("tick: " + tickCount + " speed: " + ball.getSpeed());
+//                    System.out.println("tick: " + tickCount + " speed: " + ball.getSpeed());
                 } else {
                     collisionsDisabled = true;
                     whoScored = Player.RIGHT;
@@ -191,7 +218,7 @@ public class GamePanel extends JPanel {
                     b.changeMovement(-b.getxMov(), vDirectionOnCollision(rightPaddle, b));
                     newX = b.getXshifter() + b.getxMov() * b.getSpeed();
                     tickCount++;
-                    System.out.println("tick: " + tickCount + " speed: " + ball.getSpeed());
+//                    System.out.println("tick: " + tickCount + " speed: " + ball.getSpeed());
                 } else {
                     collisionsDisabled = true;
                     whoScored = Player.LEFT;
@@ -286,5 +313,16 @@ public class GamePanel extends JPanel {
 
     public void setAuto(boolean auto) {
         this.auto = auto;
+    }
+
+    public void setDifficulty(Difficulty level) {
+        if (level == Difficulty.EASY)
+            leftPaddle.setSpeed(13);
+        if (level == Difficulty.MEDIUM)
+            leftPaddle.setSpeed(15);
+        if (level == Difficulty.HARD)
+            leftPaddle.setSpeed(17);
+
+        this.level = level;
     }
 }

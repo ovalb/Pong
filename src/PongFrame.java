@@ -46,11 +46,18 @@ public class PongFrame extends JFrame implements Runnable {
     @Override
     public void run() {
         scoreLeft = 0; scoreRight = 0;
+        canvas.setDifficulty(Difficulty.HARD);
 
         multiplayer = JOptionPane.showConfirmDialog(this, "Want to play against a bot?",
                                                     "Multiplayer? ", JOptionPane.YES_NO_OPTION);
-        if (multiplayer == 0) //if YES
+        if (multiplayer == 0) {//if YES
             canvas.setAuto(true);
+//
+//            JList list = new JList(new String[] {"foo", "bar", "gah"});
+//            JOptionPane.showMessageDialog(
+//                    null, list, "Multi-Select Example", JOptionPane.PLAIN_MESSAGE);
+
+        }
         else
             canvas.setAuto(false);
 

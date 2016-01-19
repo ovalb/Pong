@@ -40,6 +40,7 @@ public abstract class GameComponent {
 }
 
 class Ball extends GameComponent {
+    private final int DEFAULT_SPEED = 2;
     private int xShifter = 0, yShifter = 0;
     private int xMov = 0, yMov = 0;
 
@@ -53,7 +54,7 @@ class Ball extends GameComponent {
 
     Ball(int width, int height, Color c) {
         super(width, height, c);
-        setSpeed(2);
+        setSpeed(DEFAULT_SPEED);
     }
 
     public void setShifters(int x, int y) {
@@ -91,6 +92,8 @@ class Ball extends GameComponent {
 }
 
 class Paddle extends GameComponent {
+    private final int DEFAULT_SPEED = 15;
+
     private int positionShifter = 0;
 
     Paddle() {
@@ -99,7 +102,7 @@ class Paddle extends GameComponent {
 
     Paddle(int width, int height, Color c) {
         super(width, height, c);
-        setSpeed(15);
+        setSpeed(DEFAULT_SPEED);
     }
 
     public int getPositionShifter() {
