@@ -179,7 +179,6 @@ public class GamePanel extends JPanel {
     }
 
     //returns false when game ends
-    //TODO fix bug where ball passes through the paddle after vertical collision
     public boolean moveBall(Ball b) {
         int newX = b.getXshifter() + b.getxMov()*b.getSpeed();
         int newY = b.getYshifter() + b.getyMov()*b.getSpeed();
@@ -195,6 +194,7 @@ public class GamePanel extends JPanel {
         if ((ballPositionY - (b.getHeight()/2) < 0) || (ballPositionY + (b.getHeight()/2) > getHeight())) {
             b.changeMovement(b.getxMov(), -b.getyMov());
             newY = b.getYshifter() + b.getyMov() * b.getSpeed();
+            ballPositionY = centralHeight + newY; //fixed a vicious bug
         }
 
 
