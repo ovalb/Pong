@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 public class PongFrame extends JFrame implements Runnable {
     private GamePanel canvas;
     private StatusPanel statusBar;
+    private MenuPanel menuBar;
 
     private final int HEIGHT = 600;
     private final int WIDTH = 600;
@@ -31,13 +32,16 @@ public class PongFrame extends JFrame implements Runnable {
 
         canvas = new GamePanel();
         statusBar = new StatusPanel();
+        menuBar = new MenuPanel();
 
         statusBar.setPreferredSize(new Dimension(0, 50));
+        menuBar.setPreferredSize(new Dimension(0, 50));
 
-        addKeyListener(new KeyboardListener());
-
+        add(menuBar, BorderLayout.NORTH);
         add(canvas, BorderLayout.CENTER);
         add(statusBar, BorderLayout.SOUTH);
+
+        addKeyListener(new KeyboardListener());
 
         setVisible(true);
 
