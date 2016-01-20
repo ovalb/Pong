@@ -21,8 +21,8 @@ public class MenuPanel extends JPanel {
         pause = new JButton("pause");
         musicSwitch = new JButton("music");
 
-        pause.setEnabled(false);
-        musicSwitch.setEnabled(false);
+//        pause.setEnabled(false);
+//        musicSwitch.setEnabled(false);
 
         add(pause, BorderLayout.WEST);
         add(musicSwitch, BorderLayout.EAST);
