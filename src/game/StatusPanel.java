@@ -9,23 +9,24 @@ import javax.swing.*;
 public class StatusPanel extends JPanel {
     JLabel scoreLeft = new JLabel("0");
     JLabel scoreRight = new JLabel("0");
+    JLabel separator = new JLabel(" - ");
 
     StatusPanel() {
         setBackground(Color.BLACK);
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         scoreLeft.setFont(new Font("Helvetica", Font.BOLD, 24));
         scoreRight.setFont(new Font("Helvetica", Font.BOLD, 24));
+        separator.setFont(new Font("Helvetica", Font.BOLD, 24));
 
         scoreLeft.setForeground(Color.WHITE);
         scoreRight.setForeground(Color.WHITE);
+        separator.setForeground(Color.WHITE);
 
-        JSplitPane splitPane = new JSplitPane();
-        splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setBackground(Color.BLACK);
-        splitPane.setDividerSize(70);
-        splitPane.setLeftComponent(scoreLeft);
-        splitPane.setRightComponent(scoreRight);
-
-        this.add(splitPane);
+        add(Box.createHorizontalGlue());
+        add(scoreLeft);
+        add(separator);
+        add(scoreRight);
+        add(Box.createHorizontalGlue());
     }
 }
