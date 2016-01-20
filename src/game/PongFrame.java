@@ -3,6 +3,7 @@ import com.sun.codemodel.internal.JOp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -10,6 +11,7 @@ import java.awt.event.KeyEvent;
 public class PongFrame extends JFrame implements Runnable {
     private GamePanel canvas;
     private StatusPanel statusBar;
+    private MenuPanel menuBar;
 
     private final int HEIGHT = 600;
     private final int WIDTH = 600;
@@ -31,13 +33,28 @@ public class PongFrame extends JFrame implements Runnable {
 
         canvas = new GamePanel();
         statusBar = new StatusPanel();
+        menuBar = new MenuPanel();
 
         statusBar.setPreferredSize(new Dimension(0, 50));
+        menuBar.setPreferredSize(new Dimension(0, 50));
 
-        addKeyListener(new KeyboardListener());
-
+        add(menuBar, BorderLayout.NORTH);
         add(canvas, BorderLayout.CENTER);
         add(statusBar, BorderLayout.SOUTH);
+
+        //Keybindings for First player
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("UP"), "UP");
+        canvas.getActionMap().put("UP", new commandP1(Direction.UP));
+
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "DOWN");
+        canvas.getActionMap().put("DOWN", new commandP1(Direction.DOWN));
+
+        //Keybindings for Second player (optional)
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("COMMA"), "COMMA");
+        canvas.getActionMap().put("COMMA", new commandP2(Direction.UP));
+
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("PERIOD"), "PERIOD");
+        canvas.getActionMap().put("PERIOD", new commandP2(Direction.DOWN));
 
         setVisible(true);
 
@@ -52,16 +69,13 @@ public class PongFrame extends JFrame implements Runnable {
 
         multiplayer = JOptionPane.showConfirmDialog(this, "Want to play against a bot?",
                                                     "Multiplayer? ", JOptionPane.YES_NO_OPTION);
-        if (multiplayer == 0) {//if YES
+        if (multiplayer == 0) {
             canvas.setAuto(true);
-//
-//            JList list = new JList(new String[] {"foo", "bar", "gah"});
-//            JOptionPane.showMessageDialog(
-//                    null, list, "Multi-Select Example", JOptionPane.PLAIN_MESSAGE);
-
+            canvas.getActionMap().remove("COMMA");
+            canvas.getActionMap().remove("PERIOD");
         }
-        else
-            canvas.setAuto(false);
+        else canvas.setAuto(false);
+
 
         do {
             System.out.print("\nGame starting in: ");
@@ -87,22 +101,33 @@ public class PongFrame extends JFrame implements Runnable {
         this.dispose();
     }
 
-    // inner listener class
-    private class KeyboardListener extends KeyAdapter {
-        @Override public void keyPressed(KeyEvent e) {
-            if (!canvas.isAuto()) {
-                if (e.getKeyCode() == KeyEvent.VK_COMMA)
-                    canvas.movePaddle(canvas.getLeftPaddle(), Direction.UP);
-                else if (e.getKeyCode() == KeyEvent.VK_PERIOD)
-                    canvas.movePaddle(canvas.getLeftPaddle(), Direction.DOWN);
-            }
+    private class commandP1 extends AbstractAction {
+        private Direction direction;
 
-            if (e.getKeyCode() == KeyEvent.VK_UP)
+        commandP1(Direction direction) {
+            this.direction = direction;
+        }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (direction == Direction.UP)
                 canvas.movePaddle(canvas.getRightPaddle(), Direction.UP);
-            else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+            else
                 canvas.movePaddle(canvas.getRightPaddle(), Direction.DOWN);
+        }
+    }
 
-            canvas.repaint();
+    private class commandP2 extends AbstractAction {
+        private Direction direction;
+
+        commandP2(Direction direction) {
+            this.direction = direction;
+        }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (direction == Direction.UP)
+                canvas.movePaddle(canvas.getLeftPaddle(), Direction.UP);
+            else
+                canvas.movePaddle(canvas.getLeftPaddle(), Direction.DOWN);
         }
     }
 }
