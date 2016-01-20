@@ -1,9 +1,9 @@
-package game;
-import java.awt.*;
-
 /**
  * Created by gval on 06/01/16.
  */
+package game;
+import java.awt.*;
+
 public abstract class GameComponent {
     private int width, height;
     private int speed;

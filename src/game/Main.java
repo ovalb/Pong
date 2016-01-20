@@ -1,8 +1,7 @@
-package game;
-
 /* My first try on a pong game in Java
  * started 11/09/2015
  */
+package game;
 
 import javax.swing.*;
 

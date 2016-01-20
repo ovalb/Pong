@@ -1,11 +1,12 @@
+/**
+ * Created by gval on 20/01/16.
+ */
 package game;
 
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by gval on 20/01/16.
- */
+
 public class MenuPanel extends JPanel {
     private JButton pause;
     private JButton musicSwitch;

@@ -7,7 +7,6 @@ import java.awt.*;
 import javax.swing.*;
 import static java.lang.Math.random;
 
-
 enum Direction {UP, DOWN}
 enum Player {RIGHT, LEFT}
 enum Difficulty {EASY, MEDIUM, HARD}
@@ -120,8 +119,8 @@ public class GamePanel extends JPanel {
 
     private void drawPaddle(Paddle p, Graphics g) {
         g.setColor(p.getColor());
-        g.fillRect(w_pos, h_pos+p.getPositionShifter(),
-                    p.getWidth(), p.getHeight());
+        g.fillRoundRect(w_pos, h_pos+p.getPositionShifter(),
+                    p.getWidth(), p.getHeight(), 5, 5);
     }
 
     private void drawBall(Ball b, Graphics g) {
