@@ -8,22 +8,26 @@ import java.awt.*;
 
 
 public class MenuPanel extends JPanel {
-    private JButton pause;
-    private JButton musicSwitch;
+    private JLabel pause;
+    private JLabel musicSwitch;
 
-    private Icon pauseIcon;
-    private Icon musicIconOn, musicIconOff;
+    private ImageIcon pauseIcon = new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Settings.png");
+    private ImageIcon musicIconOn = new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Sound.png");
+    private ImageIcon musicIconOff = new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Mute.png");
 
     MenuPanel() {
         setBackground(Color.BLACK);
 
-        setLayout(new BorderLayout(0, 100));
+        setLayout(new BorderLayout());
 
-        pause = new JButton("pause");
-        musicSwitch = new JButton("music");
+        System.out.println("icon height: " + musicIconOn.getIconHeight() + " width: " + musicIconOn.getIconWidth());
+        System.out.println("icon height: " + musicIconOff.getIconHeight() + " width: " + musicIconOff.getIconWidth());
 
-//        pause.setEnabled(false);
-//        musicSwitch.setEnabled(false);
+
+        pause = new JLabel(pauseIcon);
+//        musicSwitch = new JLabel(musicIconOn);
+        musicSwitch = new JLabel(musicIconOff);
+
 
         add(pause, BorderLayout.WEST);
         add(musicSwitch, BorderLayout.EAST);
