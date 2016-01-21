@@ -10,6 +10,7 @@ public class PongFrame extends JFrame implements Runnable {
     private MenuPanel menuBar;
 
     private GameMenu menu;
+    private SettingsMenu settings;
 
     private final int HEIGHT = 600;
     private final int WIDTH = 600;
@@ -30,6 +31,7 @@ public class PongFrame extends JFrame implements Runnable {
         setResizable(false);
 
         menu = new GameMenu();
+        settings = new SettingsMenu();
 
         canvas = new GamePanel();
         statusBar = new StatusPanel();
@@ -38,7 +40,7 @@ public class PongFrame extends JFrame implements Runnable {
         statusBar.setPreferredSize(new Dimension(0, 50));
         menuBar.setPreferredSize(new Dimension(0, 30));
 
-        add(menu, BorderLayout.CENTER);
+        add(settings, BorderLayout.CENTER);
 
 //        add(menuBar, BorderLayout.NORTH);
 //        add(canvas, BorderLayout.CENTER);
