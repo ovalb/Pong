@@ -9,6 +9,8 @@ public class PongFrame extends JFrame implements Runnable {
     private StatusPanel statusBar;
     private MenuPanel menuBar;
 
+    private GameMenu menu;
+
     private final int HEIGHT = 600;
     private final int WIDTH = 600;
     private final int MAX_SCORE = 3;
@@ -27,6 +29,8 @@ public class PongFrame extends JFrame implements Runnable {
         setSize(WIDTH, HEIGHT);
         setResizable(false);
 
+        menu = new GameMenu();
+
         canvas = new GamePanel();
         statusBar = new StatusPanel();
         menuBar = new MenuPanel();
@@ -34,9 +38,11 @@ public class PongFrame extends JFrame implements Runnable {
         statusBar.setPreferredSize(new Dimension(0, 50));
         menuBar.setPreferredSize(new Dimension(0, 30));
 
-        add(menuBar, BorderLayout.NORTH);
-        add(canvas, BorderLayout.CENTER);
-        add(statusBar, BorderLayout.SOUTH);
+        add(menu, BorderLayout.CENTER);
+
+//        add(menuBar, BorderLayout.NORTH);
+//        add(canvas, BorderLayout.CENTER);
+//        add(statusBar, BorderLayout.SOUTH);
 
         //Keybindings for First player
         canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("UP"), "UP");
@@ -55,7 +61,7 @@ public class PongFrame extends JFrame implements Runnable {
         setVisible(true);
 
         t = new Thread(this);
-        t.start();
+//        t.start();
     }
 
     @Override
