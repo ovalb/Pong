@@ -11,7 +11,7 @@ public class SettingsMenu extends JPanel {
     final private int RADIO_SIZE = 30;
     final private ButtonGroup group = new ButtonGroup();
 
-    private JLabel message = new JLabel("Set level difficulty");
+    private JLabel message = new JLabel("Set difficulty level");
     private JRadioButton easy = new JRadioButton("EASY", false);
     private JRadioButton medium = new JRadioButton("MEDIUM", true);
     private JRadioButton hard = new JRadioButton("HARD", false);
@@ -43,5 +43,9 @@ public class SettingsMenu extends JPanel {
         add(medium);
         add(hard);
         add(back);
+    }
+
+    JButton getBack() {
+        return back;
     }
 }

@@ -160,7 +160,7 @@ public class GamePanel extends JPanel {
         }
         if (level == Difficulty.MEDIUM) {
             // Assuming bot is always leftPaddle
-            if (getWidth()/2+ball.getXshifter() < getWidth()/2-80) {
+            if (getWidth()/2+ball.getXshifter() < getWidth()/2-40) {
                 if (p.getPositionShifter() > ball.getYshifter())
                     movePaddle(p, Direction.UP);
                 if (p.getPositionShifter() < ball.getYshifter())

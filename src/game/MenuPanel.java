@@ -31,4 +31,8 @@ public class MenuPanel extends JPanel {
         add(musicSwitch, BorderLayout.EAST);
         add(Box.createRigidArea(new Dimension(10, 0)));
     }
+
+    JLabel getPause() {
+        return pause;
+    }
 }

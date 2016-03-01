@@ -4,8 +4,14 @@
 
 package game;
 
+import com.sun.codemodel.internal.JOp;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GameMenu extends JPanel {
     private final JLabel title = new JLabel(
@@ -25,9 +31,6 @@ public class GameMenu extends JPanel {
         play.setPreferredSize(new Dimension(300, 100));
         play.setFont(new Font("Futura", Font.BOLD, FONT_SIZE));
         play.setForeground(DARK_GREEN);
-//        play.setBackground(Color.DARK_GRAY);
-//        play.setOpaque(true);
-//        play.setBorderPainted(false);
 
         settings = new JButton("SETTINGS");
         settings.setPreferredSize(new Dimension(300, 100));
@@ -37,5 +40,12 @@ public class GameMenu extends JPanel {
         add(title);
         add(play);
         add(settings);
+    }
+    JButton getPlay() {
+        return play;
+    }
+
+    JButton getSettings() {
+        return settings;
     }
 }
