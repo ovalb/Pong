@@ -23,11 +23,11 @@ public class GameMenu extends JPanel {
     final private Color DARK_GREEN = new Color(0, 160, 0);
     final private int FONT_SIZE = 40;
 
-    GameMenu() {
+    GameMenu(String playOrResume) {
         setBackground(Color.BLACK);
         setLayout(new FlowLayout(FlowLayout.CENTER, 120, 30));
 
-        play = new JButton("PLAY");
+        play = new JButton(playOrResume);
         play.setPreferredSize(new Dimension(300, 100));
         play.setFont(new Font("Futura", Font.BOLD, FONT_SIZE));
         play.setForeground(DARK_GREEN);

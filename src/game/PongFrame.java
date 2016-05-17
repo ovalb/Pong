@@ -10,7 +10,7 @@ public class PongFrame extends JFrame implements Runnable {
     private StatusPanel statusBar;
     private MenuPanel menuBar;
 
-    private GameMenu menu;
+    private GameMenu menu, resumeMenu;
     private SettingsMenu settings;
 
     private final int HEIGHT = 600;
@@ -34,7 +34,8 @@ public class PongFrame extends JFrame implements Runnable {
         setSize(WIDTH, HEIGHT);
         setResizable(false);
 
-        menu = new GameMenu();
+        menu = new GameMenu("PLAY");
+        resumeMenu = new GameMenu("RESUME");
         settings = new SettingsMenu();
 
         canvas = new GamePanel();
@@ -97,7 +98,14 @@ public class PongFrame extends JFrame implements Runnable {
         menuBar.getPause().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.print("Clicked the pause button during game!");
+                // here I should pause the t thread, somehow (wait does not work)
+                remove(menuBar);
+                remove(canvas);
+                remove(statusBar);
+
+                add(resumeMenu);
+                revalidate();
+                repaint();
             }
         });
 
