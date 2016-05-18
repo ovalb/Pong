@@ -9,12 +9,16 @@ import java.awt.*;
 
 public class MenuPanel extends JPanel {
 
+    final static String pauseIconLocation = "/Users/gval/Documents/Projects/Pong/icons/Settings.png";
+    final static String soundIconLocation = "/Users/gval/Documents/Projects/Pong/icons/Sound.png";
+    final static String muteIconLocation = "/Users/gval/Documents/Projects/Pong/icons/Mute.png";
+
+    final public static ImageIcon pauseIcon = new ImageIcon(pauseIconLocation);
+    final public static ImageIcon musicOnIcon = new ImageIcon(soundIconLocation);
+    final public static ImageIcon musicOffIcon = new ImageIcon(muteIconLocation);
+
     private JLabel pause;
     private JLabel musicSwitch;
-
-    private ImageIcon pauseIcon = new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Settings.png");
-    private ImageIcon musicOnIcon = new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Sound.png");
-    private ImageIcon musicOffIcon = new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Mute.png");
 
     MenuPanel() {
         setBackground(Color.BLACK);
@@ -34,5 +38,9 @@ public class MenuPanel extends JPanel {
 
     JLabel getPause() {
         return pause;
+    }
+
+    JLabel getMusicSwitch() {
+        return musicSwitch;
     }
 }

@@ -109,6 +109,17 @@ public class PongFrame extends JFrame implements Runnable {
             }
         });
 
+        menuBar.getMusicSwitch().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //change to mute icon
+                if (menuBar.getMusicSwitch().getIcon() == MenuPanel.musicOnIcon)
+                    menuBar.getMusicSwitch().setIcon(MenuPanel.musicOffIcon);
+                else
+                    menuBar.getMusicSwitch().setIcon(MenuPanel.musicOnIcon);
+            }
+        });
+
         setVisible(true);
     }
 
