@@ -5,6 +5,8 @@ package game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SettingsMenu extends JPanel {
 
@@ -39,13 +41,33 @@ public class SettingsMenu extends JPanel {
         group.add(hard);
 
         add(message);
+
         add(easy);
         add(medium);
         add(hard);
+
         add(back);
+
+//        easy.addActionListener(this);
+//        medium.addActionListener(this);
+//        hard.addActionListener(this);
     }
+
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//        e.getActionCommand();
+//    }
 
     JButton getBack() {
         return back;
+    }
+
+    Difficulty getSelectedDifficulty() {
+        if (easy.isSelected())
+            return Difficulty.EASY;
+        if (medium.isSelected())
+            return Difficulty.MEDIUM;
+        else
+            return Difficulty.HARD;
     }
 }

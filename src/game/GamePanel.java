@@ -37,6 +37,9 @@ public class GamePanel extends JPanel {
     private boolean auto = true;
     private Difficulty level = Difficulty.MEDIUM;
 
+    private boolean gameIsOn;
+    private boolean pause = false;
+
     //Collision related components
     private int[][] newDirections = new int[][] {
             { 0, 1, 2 },
@@ -77,13 +80,16 @@ public class GamePanel extends JPanel {
     }
 
     public void play() {
-        boolean gameIsOn = true;
+        gameIsOn = true;
 
         //Set starting ball direction (randomized vertically)
         ball.changeMovement(-2, (int)(Math.random() * 10)%4-2);
 
         //Start the game
         while (gameIsOn) {
+            //for some reason I need to put an empty printf otherwise doesn't resume
+            while (pause) {System.out.print("");}
+
             gameIsOn = moveBall(ball);
             if (auto) automaticMove(leftPaddle);
 
@@ -326,5 +332,20 @@ public class GamePanel extends JPanel {
             leftPaddle.setSpeed(17);
 
         this.level = level;
+
+        //output message
+        System.out.println("\n" + level.toString() + " difficulty set.");
+    }
+
+    public Difficulty getDifficulty() {
+        return level;
+    }
+
+    public void togglePause() {
+        if (!pause)
+            pause = true;
+        else {
+            pause = false;
+        }
     }
 }

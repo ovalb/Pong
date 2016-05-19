@@ -85,11 +85,46 @@ public class PongFrame extends JFrame implements Runnable {
             }
         });
 
+        resumeMenu.getPlay().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                remove(resumeMenu);
+                add(menuBar, BorderLayout.NORTH);
+                add(canvas, BorderLayout.CENTER);
+                add(statusBar, BorderLayout.SOUTH);
+                revalidate();
+                repaint();
+
+                //set difficulty if it got modified by settings object
+                if (canvas.getDifficulty() != settings.getSelectedDifficulty())
+                    canvas.setDifficulty(settings.getSelectedDifficulty());
+
+                canvas.togglePause(); //resume game
+            }
+        });
+
+        resumeMenu.getSettings().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                remove(resumeMenu);
+                add(settings, BorderLayout.CENTER);
+                revalidate();
+                repaint();
+            }
+        });
+
         settings.getBack().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 remove(settings);
-                add(menu, BorderLayout.CENTER);
+
+                // If game is On (thread is alive), back button brings you to resumeMenu
+                // otherwise to the main initial menu
+                if (t.isAlive())
+                    add(resumeMenu, BorderLayout.CENTER);
+                else
+                    add(menu, BorderLayout.CENTER);
+
                 revalidate();
                 repaint();
             }
@@ -98,7 +133,9 @@ public class PongFrame extends JFrame implements Runnable {
         menuBar.getPause().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // here I should pause the t thread, somehow (wait does not work)
+
+                canvas.togglePause(); //pauses the game
+
                 remove(menuBar);
                 remove(canvas);
                 remove(statusBar);
@@ -126,23 +163,13 @@ public class PongFrame extends JFrame implements Runnable {
     @Override
     public void run() {
         scoreLeft = 0; scoreRight = 0;
-        canvas.setDifficulty(Difficulty.MEDIUM);
 
-//        multiplayer = JOptionPane.showConfirmDialog(this, "Want to play against a bot?",
-//                                                    "Multiplayer? ", JOptionPane.YES_NO_OPTION) == 0;
-//
-//        if (multiplayer) {
-//            canvas.setAuto(true);
-//            canvas.getActionMap().remove("COMMA");
-//            canvas.getActionMap().remove("PERIOD");
-//        }
-//        else canvas.setAuto(false);
+        canvas.setDifficulty(settings.getSelectedDifficulty());
 
         //always multiplayer, for now
         canvas.setAuto(true);
         canvas.getActionMap().remove("COMMA");
         canvas.getActionMap().remove("PERIOD");
-
 
         do {
             System.out.print("\nGame starting in: ");
