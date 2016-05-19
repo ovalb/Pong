@@ -10,7 +10,8 @@ public class PongFrame extends JFrame implements Runnable {
     private StatusPanel statusBar;
     private MenuPanel menuBar;
 
-    private GameMenu menu, resumeMenu;
+    private StartMenu menu;
+    private ResumeMenu resumeMenu;
     private SettingsMenu settings;
 
     private final int HEIGHT = 600;
@@ -20,10 +21,7 @@ public class PongFrame extends JFrame implements Runnable {
     private int scoreLeft;
     private int scoreRight;
 
-    private boolean multiplayer;
-
-//    static public enum State{ MENU, GAME, SETTINGS }
-//    private State state;
+    private boolean multiplayer = false;
 
     Thread t;
 
@@ -34,8 +32,8 @@ public class PongFrame extends JFrame implements Runnable {
         setSize(WIDTH, HEIGHT);
         setResizable(false);
 
-        menu = new GameMenu("PLAY");
-        resumeMenu = new GameMenu("RESUME");
+        menu = new StartMenu();
+        resumeMenu = new ResumeMenu();
         settings = new SettingsMenu();
 
         canvas = new GamePanel();
@@ -62,9 +60,24 @@ public class PongFrame extends JFrame implements Runnable {
         add(menu, BorderLayout.CENTER);
         t = new Thread(this);
 
-        menu.getPlay().addActionListener(new ActionListener() {
+        menu.getSingleplay().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                multiplayer = false;
+                remove(menu);
+                add(menuBar, BorderLayout.NORTH);
+                add(canvas, BorderLayout.CENTER);
+                add(statusBar, BorderLayout.SOUTH);
+                revalidate();
+                repaint();
+                t.start();
+            }
+        });
+
+        menu.getMultiplay().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                multiplayer = true;
                 remove(menu);
                 add(menuBar, BorderLayout.NORTH);
                 add(canvas, BorderLayout.CENTER);
@@ -85,7 +98,7 @@ public class PongFrame extends JFrame implements Runnable {
             }
         });
 
-        resumeMenu.getPlay().addActionListener(new ActionListener() {
+        resumeMenu.getResume().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 remove(resumeMenu);
@@ -96,7 +109,8 @@ public class PongFrame extends JFrame implements Runnable {
                 repaint();
 
                 //set difficulty if it got modified by settings object
-                if (canvas.getDifficulty() != settings.getSelectedDifficulty())
+                //also checks if it's single player mode, otherwise it's pointless
+                if (canvas.getDifficulty() != settings.getSelectedDifficulty() && !multiplayer)
                     canvas.setDifficulty(settings.getSelectedDifficulty());
 
                 canvas.togglePause(); //resume game
@@ -164,12 +178,16 @@ public class PongFrame extends JFrame implements Runnable {
     public void run() {
         scoreLeft = 0; scoreRight = 0;
 
-        canvas.setDifficulty(settings.getSelectedDifficulty());
+        canvas.setAuto(!multiplayer); //set multiplayer
 
-        //always multiplayer, for now
-        canvas.setAuto(true);
-        canvas.getActionMap().remove("COMMA");
-        canvas.getActionMap().remove("PERIOD");
+        //if it's single play (vs cpu), I need to specify a difficulty
+        //and remove player 2 keybindings
+        if (!multiplayer) {
+            canvas.getActionMap().remove("COMMA");
+            canvas.getActionMap().remove("PERIOD");
+
+            canvas.setDifficulty(settings.getSelectedDifficulty());
+        }
 
         do {
             System.out.print("\nGame starting in: ");
