@@ -27,7 +27,6 @@ public class MenuPanel extends JPanel {
 
         pause = new JLabel(pauseIcon);
         musicSwitch = new JLabel(musicOnIcon);
-//        musicSwitch = new JLabel(musicOffIcon);
 
         add(Box.createRigidArea(new Dimension(10, 0)));
         add(pause, BorderLayout.WEST);

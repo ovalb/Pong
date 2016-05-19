@@ -12,8 +12,11 @@ public class SettingsMenu extends JPanel {
 
     final private int RADIO_SIZE = 30;
     final private ButtonGroup group = new ButtonGroup();
+    final private String msgStr = "Change are going to take place immediately";
 
     private JLabel message = new JLabel("Set difficulty level");
+    private JLabel submsg = new JLabel(msgStr);
+
     private JRadioButton easy = new JRadioButton("EASY", false);
     private JRadioButton medium = new JRadioButton("MEDIUM", true);
     private JRadioButton hard = new JRadioButton("HARD", false);
@@ -21,16 +24,18 @@ public class SettingsMenu extends JPanel {
     final private JButton back = new JButton("BACK");
 
     SettingsMenu() {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 1000, 48));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 1000, 40));
         setBackground(Color.BLACK);
 
         message.setFont(new Font("Futura", Font.PLAIN, 50));
+        submsg.setFont(new Font("Futura", Font.PLAIN, 20));
         easy.setFont(new Font("Futura", Font.PLAIN, RADIO_SIZE));
         medium.setFont(new Font("Futura", Font.PLAIN, RADIO_SIZE));
         hard.setFont(new Font("Futura", Font.PLAIN, RADIO_SIZE));
         back.setFont(new Font("Futura", Font.BOLD, 40));
 
         message.setForeground(Color.BLUE);
+        submsg.setForeground(Color.CYAN);
         easy.setForeground(Color.WHITE);
         medium.setForeground(Color.WHITE);
         hard.setForeground(Color.WHITE);
@@ -41,22 +46,14 @@ public class SettingsMenu extends JPanel {
         group.add(hard);
 
         add(message);
+        add(submsg);
 
         add(easy);
         add(medium);
         add(hard);
 
         add(back);
-
-//        easy.addActionListener(this);
-//        medium.addActionListener(this);
-//        hard.addActionListener(this);
     }
-
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-//        e.getActionCommand();
-//    }
 
     JButton getBack() {
         return back;

@@ -10,8 +10,7 @@ public class ResumeMenu extends JPanel {
     private final JLabel title = new JLabel(
                 new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Pong_Title.png"));
 
-        private JButton resume;
-        private JButton settings;
+    private JButton resume, settings;
 
         final private Color DARK_GREEN = new Color(0, 160, 0);
         final private int FONT_SIZE = 40;
