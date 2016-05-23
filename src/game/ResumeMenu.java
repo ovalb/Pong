@@ -8,7 +8,7 @@ import java.awt.*;
  */
 public class ResumeMenu extends JPanel {
     private final JLabel title = new JLabel(
-                new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Pong_Title.png"));
+                new ImageIcon("/Users/gval/Projects/Pong/icons/Pong_Title.png"));
 
     private JButton resume, settings;
 

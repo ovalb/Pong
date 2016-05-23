@@ -9,9 +9,9 @@ import java.awt.*;
 
 public class MenuPanel extends JPanel {
 
-    final static String pauseIconLocation = "/Users/gval/Documents/Projects/Pong/icons/Settings.png";
-    final static String soundIconLocation = "/Users/gval/Documents/Projects/Pong/icons/Sound.png";
-    final static String muteIconLocation = "/Users/gval/Documents/Projects/Pong/icons/Mute.png";
+    final static String pauseIconLocation = "/Users/gval/Projects/Pong/icons/Settings.png";
+    final static String soundIconLocation = "/Users/gval/Projects/Pong/icons/Sound.png";
+    final static String muteIconLocation = "/Users/gval/Projects/Pong/icons/Mute.png";
 
     final public static ImageIcon pauseIcon = new ImageIcon(pauseIconLocation);
     final public static ImageIcon musicOnIcon = new ImageIcon(soundIconLocation);

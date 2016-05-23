@@ -15,7 +15,7 @@ import java.awt.event.MouseEvent;
 
 public class StartMenu extends JPanel {
     private final JLabel title = new JLabel(
-            new ImageIcon("/Users/gval/Documents/Projects/Pong/icons/Pong_Title.png"));
+            new ImageIcon("/Users/gval/Projects/Pong/icons/Pong_Title.png"));
 
     private JButton multiplay;
     private JButton singleplay;

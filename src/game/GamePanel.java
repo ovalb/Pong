@@ -88,7 +88,7 @@ public class GamePanel extends JPanel {
         //Start the game
         while (gameIsOn) {
             //for some reason I need to put an empty printf otherwise doesn't resume
-            while (pause) {System.out.print("");}
+            while (pause) {System.out.print("");} //this pauses the game
 
             gameIsOn = moveBall(ball);
             if (auto) automaticMove(leftPaddle);
